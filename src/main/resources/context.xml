@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:mongo="http://www.springframework.org/schema/data/mongo" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:util="http://www.springframework.org/schema/util"
+	xmlns:context="http://www.springframework.org/schema/context" xmlns:c="http://www.springframework.org/schema/c"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:security="http://www.springframework.org/schema/security"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+			http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+			http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
+			http://www.springframework.org/schema/data/mongo http://www.springframework.org/schema/data/mongo/spring-mongo.xsd
+			http://www.springframework.org/schema/util http://www.springframework.org/schema/util/spring-util.xsd">
+
+
+
+	<!-- Load properties so we can easily change them -->
+	<context:property-placeholder location="classpath:application.properties" />
+
+	<!-- Enable Annotation Configuration in order to automatically scan controllers -->
+	<context:annotation-config />
+	
+
+	<!-- Allow @Transactional annotations for transaction management -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+
+	<!-- Search for Rest Resources and configure them automatically -->
+	<context:component-scan base-package="com.ojas.ticket.rest.resources" />
+
+
+	<!-- DATABASE SETUP -->
+
+	<bean id="dataSource" class="org.apache.commons.dbcp2.BasicDataSource"
+		destroy-method="close">
+		<property name="username" value="${db.username}" />
+		<property name="password" value="${db.password}" />
+		<property name="driverClassName" value="${db.driver}" />
+		<property name="url" value="${db.url}" />
+	</bean>
+
+
+	<bean id="entityManagerFactory"
+		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+		<property name="dataSource" ref="dataSource" />
+		<property name="persistenceUnitName" value="examplePU" />
+		<property name="jpaVendorAdapter">
+			<bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+				<property name="generateDdl" value="true"></property>
+				<property name="showSql" value="true"></property>
+			</bean>
+		</property>
+		<property name="jpaProperties">
+			<props>
+				<prop key="hibernate.hbm2ddl.auto">update</prop>
+				<prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+			</props>
+		</property>
+	</bean>
+
+	<bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+		<property name="entityManagerFactory" ref="entityManagerFactory" />
+	</bean>
+
+	<!-- <bean id="blogPostDao" class="com.ojas.ticket.dao.blogpost.JpaBlogPostDao"> </bean>  -->
+	
+	<!-- <bean id="projectDao" class="com.ojas.ticket.project.JpaProjectDao"> </bean> -->
+	
+	<bean id="userDao" class="com.ojas.ticket.dao.user.JpaUserDao"/>
+	
+	<bean id="ticketDao" class="com.ojas.ticket.Ticket.JpaTicketDao"></bean>
+	
+	<bean id="ratingDao" class="com.ojas.ticket.dao.rating.JpaRatingDao"></bean>
+	<bean id="departmentDao" class="com.ojas.ticket.dao.department.JpaDepartmentDao"></bean>
+	<bean id="issueType" class="com.ojas.ticket.dao.issuetype.JpaIssueTypeDao"></bean>
+
+	<bean id="accessTokenDao" class="com.ojas.ticket.dao.accesstoken.JpaAccessTokenDao"></bean>
+
+	<bean id="userService" class="com.ojas.ticket.service.DaoUserService">
+		<constructor-arg ref="userDao" />
+		<constructor-arg ref="accessTokenDao" />
+	</bean>
+	
+	 <bean id="ratingService" class="com.ojas.ticket.service.RatingServiceImpl"></bean>
+		<!--<constructor-arg ref="ratingDao"></constructor-arg>
+	</bean> -->
+
+	<!-- <bean id="dataBaseInitializer" class="com.ojas.ticket.dao.DataBaseInitializer" 
+		init-method="initDataBase"> <constructor-arg ref="userDao" /> <constructor-arg 
+		ref="blogPostDao" /> <constructor-arg ref="passwordEncoder" /> </bean> -->
+
+	<!-- init-method="initDataBase" INIT REST COMPONENTS -->
+
+	<bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper" />
+
+	<!-- SPRING SECURITY SETUP -->
+
+	<bean id="passwordEncoder"
+		class="org.springframework.security.crypto.password.StandardPasswordEncoder">
+		<constructor-arg value="" />
+	</bean>
+
+	<security:authentication-manager id="authenticationManager">
+		<security:authentication-provider
+			user-service-ref="userService">
+			<security:password-encoder ref="passwordEncoder" />
+		</security:authentication-provider>
+	</security:authentication-manager>
+
+	<security:http entry-point-ref="unauthorizedEntryPoint"
+		authentication-manager-ref="authenticationManager" create-session="stateless">
+		<security:csrf disabled="true" />
+		<security:custom-filter ref="authenticationTokenProcessingFilter"
+			position="PRE_AUTH_FILTER" />
+		<security:intercept-url pattern="/rest/user/authenticate"
+			access="permitAll" />
+		<security:intercept-url method="GET"
+			pattern="/rest/blogposts/**" access="hasRole('USER')" />
+		<security:intercept-url method="PUT"
+			pattern="/rest/blogposts/**" access="hasRole('ADMIN')" />
+		<security:intercept-url method="POST"
+			pattern="/rest/blogposts/**" access="hasRole('ADMIN')" />
+		<security:intercept-url method="DELETE"
+			pattern="/rest/blogposts/**" access="hasRole('ADMIN')" />
+						
+<!-- 			<security:intercept-url method="PUT"
+			pattern="/rest/blogposts/**" access="hasRole('ROLE_BDM')" />
+		<security:intercept-url method="POST"
+			pattern="/rest/blogposts/**" access="hasRole('ROLE_BDM')" />
+		<security:intercept-url method="DELETE"
+			pattern="/rest/blogposts/**" access="hasRole('ROLE_BDM')" />
+			
+			<security:intercept-url method="PUT"
+			pattern="/rest/blogposts/**" access="hasRole('RECRUITER')" />
+		<security:intercept-url method="POST"
+			pattern="/rest/blogposts/**" access="hasRole('RECRUITER')" />
+		<security:intercept-url method="DELETE"
+			pattern="/rest/blogposts/**" access="hasRole('RECRUITER')" />
+			
+			<security:intercept-url method="PUT"
+			pattern="/rest/blogposts/**" access="hasRole('MANAGEMENT')" />
+		<security:intercept-url method="POST"
+			pattern="/rest/blogposts/**" access="hasRole('MANAGEMENT')" />
+		<security:intercept-url method="DELETE"
+			pattern="/rest/blogposts/**" access="hasRole('MANAGEMENT')" /> -->
+	</security:http>
+
+	<bean id="unauthorizedEntryPoint" class="com.ojas.ticket.rest.UnauthorizedEntryPoint" />
+
+	<bean id="authenticationTokenProcessingFilter"
+		class="com.ojas.ticket.rest.AuthenticationTokenProcessingFilter">
+		<constructor-arg ref="userService" />
+	</bean>
+	<bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
+		<property name="host" value="smtp.gmail.com" />
+		<property name="username" value="priyankanalleboina98@gmail.com" />
+		<property name="password" value="priya@94" />
+		<property name="javaMailProperties">
+			<props>
+				<prop key="mail.smtp.auth">true</prop>
+				<prop key="mail.smtp.socketFactory.port">465</prop>
+				<prop key="mail.smtp.socketFactory.class">javax.net.ssl.SSLSocketFactory</prop>
+				<prop key="mail.smtp.port">465</prop>	
+			</props>
+		</property>
+	</bean>
+	<bean id="sendMail" class="com.ojas.ticket.transfer.SendMail">
+		<property name="javaMailSender" ref="javaMailSender" />
+	</bean>
+
+	<util:map id="rolesMapping">
+	<!-- 	Domain Admins and Backup Operators from Active Directory will have 'ROLE_ADMIN' application role -->
+		<entry key="ROLE_ADMIN" value="Domain Admins|Backup Operators" />
+	<!-- 	Any authenticated user will have 'ROLE_USER' application role -->
+		<entry key="ROLE_USER" value=".+" />
+	</util:map>
+<!-- 
+	<bean id="userDetailsService" class="com.ojas.ticket.service.ADUserDetailsService" 
+		p:ldapUrl="ldap://dc.example.com:389" p:rolesMapping-ref="rolesMapping" /> 
+		<security:global-method-security secured-annotations="enabled" /> 
+		
+		<security:authentication-manager> 
+		Using as Authentication Provider 
+		<security:authentication-provider ref="userDetailsService"/> 
+			Using as UserDetailsService 
+		<security:authentication-provider  user-service-ref="userDetailsService" /> </security:authentication-manager>
+	<security:http> <security:intercept-url pattern="/login.html" access="IS_AUTHENTICATED_ANONYMOUSLY"/> 
+		All authenticated users can access to any application url 
+	<security:intercept-url pattern="/tickets**" access="ROLE_USER" /> 
+	Only Domain Admins and Backup 	Operators can access to /admin url 
+	<security:intercept-url pattern="/admin/**" access="ROLE_ADMIN" /> <security:form-login login-page="/login.html" username-parameter="email" 
+		password-parameter="password" login-processing-url="/authenticate" /> 
+		<security:logout logout-url="/logout.html" invalidate-session="true" /> 
+	</security:http> -->
+ </beans>

@@ -1,0 +1,243 @@
+<div class="row margin_set error_msg">
+<h1 class="text-center pdng">Update Ticket</h1>
+<form>
+<div class="col-md-offset-1 col-md-10">
+    <div class="col-md-6">
+         <div class="form-group">
+		 <label>Employee Id :</label> <span>*</span>
+		 <input type="text" class="form-control" rows="3" name="id" 
+							ng-model="ticketDetails.user.empId" disabled>
+		 </div>
+	</div>
+	<div class="col-md-6">
+		<div class="form-group">
+		<label>Employee Name :</label> <span>*</span>
+		<input type="text" class="form-control" rows="3" name="id"
+							ng-model="ticketDetails.user.firstName" disabled>
+		</div>
+	</div>
+	</div>
+</form>
+<form name="ticketissue">
+<div class="col-md-offset-1 col-md-10">
+   <div class="col-md-6">
+     <div class="form-group form_height">
+     <label>Desk No :</label> <span>*</span>
+     <input type="text" class="form-control" rows="3" name="descNo" 
+							 ng-model="ticketDetails.descNo" disabled>
+	 </div> 
+  </div>  
+ <div class="col-md-6">
+  <div class="form-group form_height">
+	<label>Issue Type :</label>  <span>*</span> 
+	<select class="form-control" ng-model="ticketDetails.issueType" name="issueType" disabled>
+	<option >{{ticketDetails.issueType}}</option>
+	</select>
+	<span ng-show="ticketissue.issueType.$touched &&ticketissue.issueType.$pristine">*
+						Issuetype is required</span>
+<!-- 	<input type="text" class="form-control" ng-model="ticketDetails.issueType" name="issueType"> -->
+	</div>
+  </div>  
+  <div class="col-md-6">
+  <div class="form-group form_height">
+	<label>Priority :</label>  <span>*</span>
+	<select class="form-control" ng-model="ticketDetails.priority" name="priority" disabled>
+	<option disabled selected hidden value="">Select option</option>
+    <option ng-repeat="priority in priorities">{{priority}}</option>
+	</select>
+  </div>
+  </div> 
+   <div class="col-md-6">
+  <div class="form-group form_height">
+  <label>Description :</label> <span>*</span>
+  <input type="text" class="form-control" name="description" ng-model="ticketDetails.description"  disabled>
+  </div>
+  </div>
+   <div class="col-md-6">
+   <div >
+	 <div class="form-group form_height" ng-hide="hidingstatus" >
+	 <label>Status :</label>  <span>*</span>
+	 <select class="form-control" ng-model="ticketDetails.status" name="status" id="stutus_user" ng-change="statusforuserfun()" required>
+	 <option disabled selected hidden value="">Select option</option>
+	 <option ng-repeat="status in statuses">{{status}}</option>
+	 </select>
+	 <span ng-show="ticketissue.status.$touched &&ticketissue.status.$pristine">*
+						Status is required</span>
+    </div> 
+   </div>
+  </div>
+    <div id="divsforcomment">
+  <div class="col-md-6">
+	 <div class="form-group" >
+	 <label>Comments :</label>  <span>*</span>
+	<textarea class="form-control" name="comment" ng-model="ticketDetails.comment" id="comment" rows="6" disabled></textarea>
+   </div>
+  </div>
+   <div class="col-md-6">
+   <div class="form-group form_height">
+   <label>Attachment :</label> <input type="file" name="attachment" file ng-model="ticketDetails.attachment">
+   </div>
+  </div>
+  <div class="col-md-6 pull-right">
+	 <div class="form-group" ng-hide="hidingstatus" >
+	 <label>Additional Comments :</label>
+	<textarea class="form-control" name="clarification" ng-model="clarification" rows="4" id="clarification"></textarea>
+	<!-- 	 <span ng-show="ticketissue.clarification.$touched &&ticketissue.clarification.$pristine">*
+					Additional Comments is required</span> -->
+    </div> 
+   </div>
+  </div>
+  <div class="col-md-12">
+  <div class="form-group pull-right">
+ 	<!-- <button type="button" class="btn btn-primary" data-target="#queryform" data-toggle="modal">Sent back for clarification</button> -->
+<!--  	<button type="reset" class="btn btn-danger">Cancel</button> -->
+<!-- <button type="button" class="btn btn-warning"  data-target="#assignform" data-toggle="modal" ng-click="assignfunemails()">Assign</button> -->
+<button type="button" class="btn btn-warning"  ng-hide="ticketDetails.status=='Resolved'" ng-click="reassignadmin()">Reassign</button>
+   <button type="button" class="btn btn-default" ui-sref="raiseticket.assignedissues">Close</button>
+   <button type="button" class="btn btn-primary" ng-click="updateticket()" id="submit_form">Submit</button>
+  </div>
+  </div>
+<!-- <!--   query modal -->
+<!--     <div class="modal fade" id="queryform" role="dialog">
+    <div class="modal-dialog">
+    
+      Modal content
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title"></h4>
+        </div>
+        <div class="modal-body">
+          	<div class="form-group">
+			<label>Query :</label>
+			<textarea class="form-control" rows="2" name="query" ng-model="$parent.adminquery" id="querytext"></textarea>
+		  </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" ng-click="sentbackfun()" data-dismiss="modal">Save</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>  -->
+  
+<!--    reassign modal -->
+   <div class="modal fade" id="reassignform" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title"></h4>
+        </div>
+        <div class="modal-body">
+         	<!-- <div class="form-group">
+		<label>Remark :</label>
+		<textarea class="form-control" rows="2" name="remark" ng-model="$parent.remark" id="remarktext" required></textarea>
+		<span  ng-show="ticketissue.remark.$touched && ticketissue.remark.$error.required">*
+							Remark is required</span>
+		</div> -->
+		<div class="form-group">
+		<label>Department :</label>  <span>*</span> 
+		<select class="form-control" ng-model="$parent.dept" required ng-change="assign()" name="department"  id="deptid">
+		<option disabled selected hidden value="">Select option</option>
+		<option ng-repeat="dept in department">{{dept.deptName}}</option>
+		</select>
+		<span  ng-show="ticketissue.department.$touched && ticketissue.department.$pristine">*
+							Department is required</span>
+	    </div>
+		<div class="form-group">
+			<label> Re-assign to :</label> <span>*</span>
+			<select class="form-control" ng-model="ticketDetails.assign" name="assign" required id="reassignmail">
+			<option disabled selected hidden value="">Select option</option>
+			<option ng-repeat="assign in assignedTo">{{assign.email}}</option>
+			</select>
+			<span  ng-show="ticketissue.reassign.$touched && ticketissue.reassign.$pristine">*
+								Assign to is required</span>
+	</div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" ng-click="assignfun()">Save</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+<!-- assign modal   -->
+   <div class="modal fade" id="assignform" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title"></h4>
+        </div>
+        <div class="modal-body">
+         	<div class="form-group">
+		<label>Remark :</label>
+		<textarea class="form-control" rows="2" name="remark" ng-model="$parent.remark" id="" required></textarea>
+		<span  ng-show="ticketissue.remark.$touched && ticketissue.remark.$error.required">*
+							Remark is required</span>
+		</div>
+		<div class="form-group">
+			<label> Re-assign to :</label> <span>*</span>
+			<select class="form-control" ng-model="$parent.assign" name="assign" required id="">
+			<option disabled selected hidden value="">Select option</option>
+			<option ng-repeat="assign in assignedTo">{{assign}}</option>
+			</select>
+			<span  ng-show="ticketissue.reassign.$touched && ticketissue.reassign.$pristine">*
+								Assign to is required</span>
+	</div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" ng-click="assignfun()">Save</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  
+  
+  
+  
+  
+<!--   
+  <div class="col-md-6">
+  <div>
+	<div class="form-group" ng-hide="hidingreassign">
+	<input type="checkbox" ng-model="reassign" id="reassigns" ng-click="reassignfun()"><b>Reassign</b>
+	</div>
+   <div ng-if="reassign">
+	<div class="form-group">
+	<label>Remark:</label>
+	<textarea class="form-control" rows="2" name="remark" ng-model="ticketDetails.remark" id="remarktext" required></textarea>
+	<span  ng-show="ticketissue.remark.$touched && ticketissue.remark.$error.required">*
+						Remark is required</span>
+	</div>
+	<div class="form-group">
+	<label>Department:</label>  <span>*</span> 
+	<select class="form-control" ng-model="ticketDetails.dept" required ng-change="reassign()" name="department"  id="deptid">
+	<option disabled selected hidden value="">Select option</option>
+	<option ng-repeat="dept in department">{{dept}}</option>
+	</select>
+	<span  ng-show="ticketissue.department.$touched && ticketissue.department.$pristine">*
+						Department is required</span>
+    </div>
+	<div class="form-group">
+		<label> Re-assign to:</label> <span>*</span>
+		<select class="form-control" ng-model="ticketDetails.assign" name="assign" required>
+		<option disabled selected hidden value="">Select option</option>
+		<option ng-repeat="assign in assignedTo">{{assign.email}}</option>
+		</select>
+		<span  ng-show="ticketissue.reassign.$touched && ticketissue.reassign.$pristine">*
+							Assign to is required</span>
+	</div>
+   </div>
+ </div>
+  </div> -->
+</div>
+</form>
+</div>

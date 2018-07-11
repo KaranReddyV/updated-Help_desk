@@ -1,0 +1,112 @@
+<div class="">
+	<div id="throbber" style="display: none; min-height: 120px;"></div>
+	<div id="noty-holder"></div>
+	<div class="">
+		<div class="">
+			<nav class="navbar navbar-default navbtm navtop" role="navigation">
+				<!--  <div class="container">
+	   <ul class="nav navbar-nav">
+	   <li class="pull-left"><a ui-sref="raiseticket.Dashboard">Home</a></li>
+	   </ul>
+	   <ul class="nav navbar-nav navbar-right">
+	    <li><a href="" ng-click="logout()" ui-sref="/login">LogOut</a></li>
+	   </ul>
+	   </div> -->
+			</nav>
+			<nav class="navbar navbar-default navbtm navmain">
+				<div class="container-fluid">
+					<div class="navbar-header">
+						<button type="button" class="navbar-toggle" data-toggle="collapse"
+							data-target="#myNavbar">
+							<span class="icon-bar"></span> <span class="icon-bar"></span> <span
+								class="icon-bar"></span>
+						</button>
+						<!--   toggle bar -->
+						<a class="navbar-brand" href=""> <i
+							class="fa fa-align-justify fa-2x"
+							style="color: rgb(96, 153, 205)" ng-click="togglefun()"></i></a> <a
+							class="navbar-brand"><img src="ojas-logo.png"></a> <a
+							ui-sref="raiseticket.Dashboard"><img src="helpdesk.png"><b>HelpDesk</b></a>
+					</div>
+					<div class="collapse navbar-collapse" id="myNavbar">
+						<ul class="nav navbar-nav navbar-right">
+							<!--       <li ui-sref="raiseticket.Dashboard"><a href=""><i class="fa fa-home fa-lg home_color" aria-hidden="true"></i></a></li> -->
+							<li class="dropdown user_icon dropbtn" onclick="myFunction()">
+								<a href="#" data-toggle="dropdown" class="dropdown-toggle"><i
+									class="fa fa-user-circle-o" aria-hidden="true"></i>
+									{{email_user}} <b class="caret"></b></a>
+								<ul class="dropdown-menu dropdown-content" id="myDropdown">
+									<li><a href="" ng-click="logout()"
+										style="color: #000 !important">LogOut</a></li>
+								</ul>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+			<div class="navbar navbar-default navtop navbtm navheight"></div>
+		</div>
+	</div>
+	<div class="clearfix"></div>
+	<div ui-view=""></div>
+</div>
+<div>
+	<nav class="navbar sidenav_dashboard" id="sidenav">
+		<ul>
+			<li><a ui-sref="raiseticket.Dashboard"><i
+					class="fa fa-dashboard fa-2x"></i> Dashboard</a></li>
+			<li ng-click="togglefun()"><a
+				ui-sref="raiseticket.raiseticketservices" ng-if="!all_users_role"><i
+					class="fa fa-plus fa-2x"></i> New Ticket</a></li>
+			<li ng-click="togglefun()"><a ui-sref="raiseticket.alltickets" ng-if="!all_users_role">
+					<i class="fa fa-ticket fa-2x"></i> View Tickets
+			</a> <a ui-sref="raiseticket.alltickets" ng-if="all_users_role">
+					<i class="fa fa-ticket fa-2x"></i> Open Tickets
+			</a></li>
+			<li ng-click="togglefun()" ng-if="!all_users_role"><a
+				ui-sref="raiseticket.viewtickets"> <i
+					class="fa fa-pencil-square-o fa-2x"></i> Update Ticket
+			</a></li>
+			<li ng-click="togglefun()" ng-if="all_users_role"><a
+				ui-sref="raiseticket.assignedissues"> <i
+					class="fa fa-pencil-square-o fa-2x"></i> Assigned Tickets
+			</a></li>
+			<li ng-if="all_users_role" ng-click="togglefun()"><a> <i
+					class="fa fa-thumbs-o-up fa-2x" aria-hidden="true"></i>Approvals
+			</a></li>
+			<li ng-if="all_users_role" ng-click="togglefun()"><a> <i
+					class="fa fa-users fa-2x"></i> User Management
+			</a></li>
+			<li ng-if="all_users_role" ng-click="togglefun()"><a><i
+					class="fa fa-database fa-2x" aria-hidden="true"></i>Admin Master </a></li>
+			<li ng-if="all_users_role" ng-click="togglefun()"
+				ui-sref="raiseticket.feedback"><a><i
+					class="fa fa-comments fa-2x" aria-hidden="true"></i>Reports </a></li>
+			<li ng-if="!all_users_role" ng-click="togglefun()"
+				ui-sref="raiseticket.feedback"><a><i
+					class="fa fa-comments fa-2x" aria-hidden="true"></i>Feedback </a></li>
+		</ul>
+	</nav>
+	<!-- end -->
+</div>
+
+<script>
+	function myFunction() {
+		document.getElementById("myDropdown").classList.toggle("show");
+	}
+
+	// Close the dropdown if the user clicks outside of it
+	onclick = function(event) {
+		if (!event.target.matches('.dropbtn')) {
+
+			var dropdowns = document.getElementsByClassName("dropdown-content");
+			var i;
+			for (i = 0; i < dropdowns.length; i++) {
+				var openDropdown = dropdowns[i];
+				if (openDropdown.classList.contains('show')) {
+					openDropdown.classList.remove('show');
+				}
+			}
+		}
+	}
+</script>

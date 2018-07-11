@@ -1,0 +1,151 @@
+<div class="row margin_set error_msg">
+<h3 class="text-center"> Ticket Id </h3>
+<h4 class="text-center">{{ticketDetails.id}}</h4>
+<form>
+<div class="col-md-offset-1 col-md-10">
+    <div class="col-md-6">
+         <div class="form-group">
+		 <label>Employee Id :</label> <span>*</span>
+		 <input type="text" class="form-control" rows="3" name="id" placeholder="Enter your id"
+							ng-model="ticketDetails.user.empId" disabled>
+	     <!--<span  ng-show="ticketissue.id.$touched &&ticketissue.id.$error.required">*
+						Id Is Required</span> -->
+		 </div>
+	</div>
+	<div class="col-md-6">
+		<div class="form-group">
+		<label>Employee Name :</label> <span>*</span>
+		<input type="text" class="form-control" rows="3" name="id" placeholder="Enter your name"
+							ng-model="ticketDetails.user.firstName" disabled>
+		<!--<span  ng-show="ticketissue.id.$touched &&ticketissue.id.$error.required">*
+						Id Is Required</span> -->
+		</div>
+	</div>
+	</div>
+</form>
+<form name="ticketissue">
+<div class="col-md-offset-1 col-md-10">
+   <div class="col-md-6">
+     <div class="form-group form_height">
+     <label>Desk No :</label> <span>*</span>
+     <input type="text" class="form-control" rows="3" name="descNo" placeholder="Enter your desk no"
+							 ng-model="ticketDetails.descNo" ng-disabled="ticketDetails.status!=='Draft'">
+	 </div> 
+  </div>  
+ <div class="col-md-6">
+  <div class="form-group form_height">
+	<label>Issue Type :</label>  <span>*</span> 
+	<select class="form-control" ng-model="ticketDetails.issueType" name="issueType" ng-disabled="ticketDetails.status!=='Draft'">
+		<option ng-repeat="issueType in issuetypes">{{issueType}}</option>
+	</select>
+	<!-- <input type="text" class="form-control" ng-model="ticketDetails.issueType" name="issueType" ng-disabled="ticketDetails.status!=='Draft'"> -->
+	</div>
+ </div> 
+  <div class="col-md-6">
+  <div class="form-group form_height">
+	<label>Priority :</label>  <span>*</span>
+	<select class="form-control" ng-model="ticketDetails.priority" name="priority" ng-disabled="ticketDetails.status!=='Draft'">
+	<option disabled selected hidden value="">Select option</option>
+    <option ng-repeat="priority in priorities">{{priority}}</option>
+	</select>
+  </div>
+  </div> 
+  <div class="col-md-6">
+  <div class="form-group form_height">
+  <label>Description :</label> <span>*</span>
+  <input type="text" class="form-control" name="description" ng-model="ticketDetails.description"  ng-disabled="ticketDetails.status!=='Draft'">
+  </div>
+  </div>
+  <div class="col-md-6">
+   <div id="">
+	 <div class="form-group form_height" >
+	 <label>Status :</label>  <span>*</span>
+	 <select class="form-control" ng-model="ticketDetails.status" name="status" id="stutus_user" ng-change="statusforuserfun()" >
+	 <option ng-repeat="status in updatestatus">{{status}}</option>
+	 </select>
+	 <span ng-show="ticketissue.status.$touched &&ticketissue.status.$pristine">*
+						Status is required</span>
+    </div> 
+   </div>
+  </div>
+
+  <div class="col-md-6">
+   <div id="">
+	 <div class="form-group form_height" >
+	 <label>Comments :</label>  <span>*</span>
+	<textarea class="form-control" name="comment" ng-model="ticketDetails.comment"  rows="6"  ng-disabled="ticketDetails.status!=='Draft'"></textarea>
+    </div> 
+   </div>
+  </div>
+   
+  <div class="col-md-6">
+   <div class="form-group form_height">
+   <label>Attachment :</label> <input type="file" name="attachment" file ng-model="ticketDetails.attachment">
+   </div>
+  </div>
+  <div class="col-md-6 " ng-hide="ticket_status=='Draft'" >
+	 <div class="form-group height_comments">
+	 <label>Additional Comments :</label>
+	<textarea class="form-control" name="clarification" ng-model="clarification" rows="4" id="clarification"></textarea>
+<!-- 		 <span ng-show="ticketissue.clarification.$touched &&ticketissue.clarification.$pristine">*
+					Additional Comments is required</span> -->
+    </div> 
+   </div>
+
+  <div class="col-md-12 file_height">
+  <div class="form-group pull-right">
+  <button type="button" class="btn btn-default" ui-sref="raiseticket.viewtickets">Close</button>
+ <!--  <button type="button" class="btn btn-info">Save</button> -->
+<!--  	 <button type="button" class="btn btn-primary" data-target="#responseform" data-toggle="modal">Provide clarification for query</button> -->
+    <button type="button" class="btn btn-primary" ng-click="updateticket()" id="submit_form">Submit</button>
+ </div>	
+  </div>
+  </div>
+  </form>
+  </div>
+   <div class="modal fade" id="responseform" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title"></h4>
+        </div>
+        <div class="modal-body">
+          	<div class="form-group">
+			<label>Comment :</label>
+			<textarea class="form-control" rows="2" name="response" ng-model="$parent.ticketdetails.response" id="responsetext"></textarea>
+		  </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary" ng-click="draftfun()" data-dismiss="modal">Save</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+ <div class="modal fade" id="reopen" role="dialog">
+    <div class="modal-dialog">
+      Modal content
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+      <div class="modal-body">
+			<div class="form-group form_height" >
+	   <label>Comments :</label>  <span>*</span>
+     	<textarea class="form-control" name="reopencomment" ng-model="$parent.reopencomment"></textarea>
+       </div> 
+		</div>
+		 <div class="modal-footer">
+          <button type="button" class="btn btn-primary" ng-click="reopenfun()" data-dismiss="modal">Save</button>
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
+

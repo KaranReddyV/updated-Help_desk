@@ -1,0 +1,192 @@
+
+<div class="row margin_set">
+	<div class="col-lg-12  col-md-12 col-xs-12 col-sm-12"
+		ng-show="tickets && !notickets">
+		<h2 class="text-center pdng">
+			<b>List Of Tickets</b>
+		</h2>
+		<table class="table table1 table-condensed" ng-init="viewtickets()">
+			<col width="110">
+			<col width="110">
+			<col width="110">
+			<col width="160">
+			<col width="120">
+			<col width="120">
+			<col width="120">
+			<col width="120">
+			<thead>
+				<tr>
+					<th><input list="browsers3" id="filteritems"
+						class="form-control" placeholder="Search"
+						ng-change="ticketidfun()" ng-model="listofids"> <datalist
+							id="browsers3">
+							<option ng-repeat="listofids in ticketid">{{listofids}}</option>
+						</datalist></th>
+					<th><input list="browsers1" ng-change="prioritychnagefun()"
+						class="form-control" ng-model="priority" placeholder="Search">
+						<datalist id="browsers1">
+							<option ng-repeat="priority in priorities">{{priority}}</option>
+						</datalist></th>
+					<th><input list="browsers" ng-change="statuschnagefun()"
+						class="form-control" ng-model="status" placeholder="Search">
+						<datalist id="browsers">
+							<option ng-repeat="status in statuses">{{status}}</option>
+						</datalist></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+				</tr>
+				<tr>
+					<th>Ticket Id</th>
+					<th>Priority</th>
+					<th>Status</th>
+					<th ng-click="orderByMe()">Created Date <i
+						class="fa fa-sort-asc" aria-hidden="true"></i><i
+						class="fa fa-sort-desc" aria-hidden="true"></i></th>
+					<th>Description</th>
+					<th>Department</th>
+					<th>Attachment</th>
+					<th>Action</th>
+				</tr>
+
+			</thead>
+			<tbody id="listoftickets">
+				<tr ng-repeat="issue in details | orderBy:column:reverse">
+					<td><a href="" ng-click="profilefun(issue.id)"
+						data-toggle="modal" data-target="#myModal">{{issue.id}}</a></td>
+					<!-- 	<td>{{issue.summary}}</td> -->
+					<td>{{issue.priority}}</td>
+					<td>{{issue.status}}</td>
+					<td>{{issue.createdDate}}</td>
+					<td>{{issue.description}}</td>
+					<td>{{issue.deptName}}</td>
+					<td ng-show="issue.attachment!==null"><b class="attachment"
+						ng-click="viewimage(issue.id)"><a href="">Yes</a></b></td>
+					<td ng-show="issue.attachment==null"><b class="attachment"><a
+							href="">No</a></b></td>
+					<td><a ng-hide="issue.status=='Closed'"
+						ui-sref="raiseticket.editform({ticketid:issue.id})"><b>Modify</b></a></td>
+				</tr>
+			</tbody>
+		</table>
+		<div id="notickets">
+			<h2 class="pdng text-center">Currently no tickets found</h2>
+		</div>
+		<pagination total-items="totalCount" ng-change="pageChanged()"
+			items-per-page="pageSizeSelected" direction-links="true"
+			ng-model="pageIndex" max-size="maxSize" class="pagination"
+			boundary-links="true" rotate="false" num-pages="numPages"></pagination>
+
+	</div>
+
+	<!-- image view for table -->
+	<div class="modal fade" id="myModalofimage" role="dialog">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal">&times;</button>
+				</div>
+				<div class="modal-body">
+					<img ng-src="data:image/jpeg;base64,{{attachment}}" id="photo-id"
+						width="100%" />
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+	<div ng-show="notickets && !tickets">
+		<h2 class="pdng text-center">Currently no tickets found</h2>
+	</div>
+</div>
+
+<!-- profile details -->
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h3 class="modal-title text-center">Ticket Id</h3>
+				<h4 class="text-center">{{ticketDetails.id}}</h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-offset-1 col-md-10 usertable">
+						<div class="col-md-offset-2 col-md-8">
+							<h3 class="pdng text-center">User Details</h3>
+							<div class="col-md-6 alltickets_mrgn">Employee Id</div>
+							<div class="col-md-6 alltickets_mrgn">{{ticketDetails.user.empId}}</div>
+							<div class="col-md-6 alltickets_mrgn">Employee Name</div>
+							<div class="col-md-6 alltickets_mrgn">{{ticketDetails.user.firstName}}</div>
+							<div class="col-md-6 alltickets_mrgn">Desk No</div>
+							<div class="col-md-6 alltickets_mrgn">{{ticketDetails.descNo}}</div>
+						</div>
+					</div>
+					<div class="col-md-offset-1 col-md-10 tickettable">
+						<div class="col-md-offset-2 col-md-8">
+							<h3 class="pdng text-center">Ticket Details</h3>
+							<div class="col-md-6 alltickets_mrgn">Ticket Id</div>
+							<div class="col-md-6 alltickets_mrgn">{{ticketDetails.id}}</div>
+							<div class="col-md-6 alltickets_mrgn">IssueType</div>
+							<div class="col-md-6 alltickets_mrgn">{{ticketDetails.issueType}}</div>
+							<div class="col-md-6 alltickets_mrgn">Priority</div>
+							<div class="col-md-6 alltickets_mrgn">{{ticketDetails.priority}}</div>
+							<div class="col-md-6 alltickets_mrgn">Description</div>
+							<div class="col-md-6 alltickets_mrgn">{{ticketDetails.description}}</div>
+							<div class="col-md-6 alltickets_mrgn">Status</div>
+							<div class="col-md-6 alltickets_mrgn">{{ticketDetails.status}}</div>
+							<div class="col-md-6 alltickets_mrgn">Comments</div>
+							<div class="col-md-6 alltickets_mrgn">{{ticketDetails.comment}}</div>
+						<!-- 	<div class="col-md-6 alltickets_mrgn">Remark</div>
+							<div class="col-md-6 alltickets_mrgn">{{ticketDetails.comment}}</div> -->
+							<div class="col-md-6 alltickets_mrgn">Attachment</div>
+						   <div class="col-md-6 alltickets_mrgn" ng-if="ticketDetails.attachment!==null">
+								{{ticketDetails.fileName}}
+								<button type="button" class="btn btn-primary btn-sm"
+									ng-disabled="ticketDetails.attachment==null"
+									data-toggle="modal" data-target="#myModal1"
+									ng-click="viewimage(issue.id)">View</button>
+							</div>
+							<div class="col-md-6 alltickets_mrgn" ng-if="ticketDetails.attachment==null">
+								{{ticketDetails.fileName}}
+								<p>No</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+
+	</div>
+</div>
+<!-- attachment view -->
+<div class="modal fade" id="myModal1" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<img ng-src="data:image/jpeg;base64,{{ticketDetails.attachment}}"
+					id="photo-id" width="100%" />
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+
+	</div>
+</div>
+
+
+

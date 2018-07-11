@@ -1,0 +1,55 @@
+
+	<div class="container-fluid height_login">
+		<div class="row">
+				<div class="col-md-5 col-sm-5 pull-left" >
+					<img src="ojas-logo.png" alt="Ojas" class="img-responsive"
+							width="180px" height="150px">
+				</div>
+				<div class="col-md-2 col-sm-2"></div>
+				<div class="col-md-5 col-sm-5 para">
+					<p class="pull-right"><span class="yellow">Experience Certainty:</span>IT Services Business Solutions
+						Consulting Services</p>
+				</div>
+		</div>
+		<div class="row">
+			<div class="col-md-4 col-sm-4"></div>
+			<div class="col-md-4 col-sm-4 login">
+			      <img id="profile-img" class="profile-img-card" src="http://itapuamonteverde.com.br/wp-content/uploads/2018/01/xtqwqiphehtgofvznyec.png" />
+				<h2 class="h2">Login Page</h2>
+
+				<form name="frmv">
+					<div class="form-group form_height">
+						<label for="username">Email Id:  <span>*</span></label>
+						 <input type="email"
+							name="email" class="form-control" ng-model="email" placeholder="Enter email id" required/>
+						<span  ng-show=" frmv.email.$touched &&  frmv.email.$error.required">*
+						Email id is required</span>
+
+					</div>
+					<div class="form-group form_height">
+						<label for="pwd">Password: <span>*</span></label> <input type="password"
+							name="password" ng-model="password" class="form-control" placeholder="Enter passsword" required />
+						<span
+							ng-show="frmv.password.$touched &&  frmv.password.$error.required">*
+							Password is required</span>
+					</div>
+					<div class="form-group">
+						<button type="button" class="btn btn-success center-block btn-md"
+							ng-disabled="frmv.$invalid" ng-click="login()">LogIn</button>
+					</div>
+					<div class="form-group">
+						  <span><a ui-sref="regpage" class="pull-right">Register Now</a></span> 
+				 		  <span><a class="pull-left" ui-sref="forgotpwdpage">Forgot Password ?</a></span>
+					 </div>
+				
+				</form>
+			</div>
+
+			<div class="col-md-4 col-sm-4"></div>
+		</div>
+		
+		<footer>
+		<p class="clrhdng text-center"> <span class="yellow" >&copy 2011-2018</span> Ojas Innovative
+						Technologies. All rights reserved.</p>
+		</footer>
+	</div>

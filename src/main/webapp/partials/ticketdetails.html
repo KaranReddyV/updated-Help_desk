@@ -1,0 +1,75 @@
+<div class="row bg-white">
+    <div class="col-md-offset-3 col-md-6 usertable">
+    <h3 class="text-center pdng">User Details</h3>
+    <div class="col-md-offset-2 col-md-8">
+    <table class="table">
+		<tr>
+		<th>Employee Id:</th>
+		<td>{{ticketDetails.user.empId}}</td>
+		</tr>
+		<tr>
+		<th>Employee Name:</th>
+		<td>{{ticketDetails.user.firstName}}</td>
+		</tr>
+		<tr>
+		<th>Desk No:</th>
+		<td>{{ticketDetails.descNo}}</td>
+		</tr>
+	</table>
+    </div>
+    </div>
+     <div class="col-md-offset-3 col-md-6 tickettable">
+         <h3 class="text-center pdng">Ticket Details</h3>
+    <div class="col-md-offset-2 col-md-8">
+			<table class="table">
+			<tr>
+			<th>Ticket Id:</th>
+			<td>{{ticketDetails.id}}</td>
+			</tr>
+			<tr>
+			<th>Priority:</th>
+			<td>{{ticketDetails.priority}}</td>
+			</tr>
+			<tr>
+			<th>Description:</th>
+			<td>{{ticketDetails.description}}</td>
+			</tr>
+			<tr>
+			<th>Status:</th>
+			<td>{{ticketDetails.status}}</td>
+			</tr>
+			<tr>
+			<th>Department:</th>
+			<td>{{ticketDetails.user.department}}</td>
+			</tr>
+			<tr>
+			<tr>
+			<th>Comment:</th>
+			<td>{{ticketDetails.comment}}</td>
+			</tr>
+			<tr>
+			<th>Attachment:</th>
+			<td>{{ticketDetails.fileName}} <button type="button" class="btn btn-primary btn-sm" ng-disabled="ticketDetails.attachment==null" 
+			 data-toggle="modal" data-target="#myModal1" ng-click="viewimage(issue.id)">View</button></td>
+			</tr>
+</table>
+    </div>
+   </div>
+</div>
+
+  <div class="modal fade" id="myModal1" role="dialog">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+        </div>
+        <div class="modal-body">
+      <img ng-src="data:image/jpeg;base64,{{ticketDetails.attachment}}" id="photo-id" width="100%"/>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>

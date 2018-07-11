@@ -1,0 +1,108 @@
+         	<div class="col-md-12 margin_set error_msg">
+         	<h1 class="text-center pdng">Raise a Ticket</h1>
+         	<form>
+         	<div class="col-md-offset-1 col-md-10">
+         	         <div class="col-md-6">
+         	         	    <div class="form-group">
+         	         	     <label>Assign To :</label> <input type="text" class="form-control"ng-model="email1" disabled>
+         	         	     </div>	
+         	         	  </div>	
+         	         	         <div class="col-md-6"></div>
+         		
+			</div>
+         	</form>
+				<form name="ticketissue">
+				<div class="col-md-offset-1 col-md-10">
+				<div class="col-md-6">
+         		    <div class="form-group">
+						<label>Employee Id :</label> <span>*</span>
+						<input type="text" class="form-control" rows="3" name="id" placeholder="Enter Your id"
+							ng-model="empId" disabled>
+	<!-- 					<span  ng-show="ticketissue.id.$touched &&ticketissue.id.$error.required">*
+						Id Is Required</span> -->
+					</div>
+				</div>
+				<div class="col-md-6">
+					<div class="form-group">
+					<label>Employee Name :</label> <span>*</span>
+						<input type="text" class="form-control" rows="3" name="id" placeholder="Enter Your Name"
+							ng-model="firstName" disabled>
+			<!-- 			<span  ng-show="ticketissue.id.$touched &&ticketissue.id.$error.required">*
+						Id Is Required</span> -->
+					</div>
+				</div>
+				    <div class="col-md-6">
+				       <div class="form-group form_height">
+						<label>Desk No :</label> <span>*</span>
+						<input type="text" class="form-control" name="descNo" placeholder="Enter Your desk No"
+							ng-model="ticketDetails.descNo" required>
+						<span  ng-show="ticketissue.descNo.$touched &&ticketissue.descNo.$error.required">*
+						Desk no is required</span>
+						</div>
+					</div>
+	             	<div class="col-md-6">
+					  <div class="form-group form_height">
+						<label>Issue Type :</label>  <span>*</span> 
+						<select class="form-control" ng-model="ticketDetails.issueType" name="issueType" required>
+						<option disabled selected hidden value="">Select option</option>
+						<option ng-repeat="issueType in issuetypes">{{issueType}}</option>
+						</select>
+						<span ng-show="ticketissue.issueType.$touched &&ticketissue.issueType.$pristine">*
+						Issue Type is required</span>
+						</div>
+					</div>
+	               <div class="col-md-6">
+	                   <div class="form-group form_height">
+						<label>Priority :</label>  <span>*</span>
+						<select class="form-control" ng-change="priorityfun()" id="priorityid"
+							ng-model="ticketDetails.priority" name="priority" required>
+							<option disabled selected hidden value="">Select Option</option>
+						    <option ng-repeat="priority in priorities">{{priority}}</option>
+						</select>
+						   <span ng-show="ticketissue.priority.$touched &&ticketissue.priority.$pristine">*
+						Priority is required</span>
+					</div>
+					<div class="form-group form_height" id="reasonid">
+					<label>Reason :</label>  <span>*</span> 
+					<textarea class="form-control" name="reason"
+							ng-model="ticketDetails.reason" ></textarea>
+									<span  ng-show="ticketissue.reason.$touched &&ticketissue.reason.$error.required">*
+						Reason is required</span>
+					</div>
+	               </div>
+	               	<div class="col-md-6">
+					 <div class="form-group form_height">
+						<label>Description :</label> <span>*</span>
+						<input type="text" class="form-control" name="description"
+							ng-model="ticketDetails.description" required>
+									<span  ng-show="ticketissue.description.$touched &&ticketissue.description.$error.required">*
+						Description is required</span>
+					</div>
+	               </div>
+	                 <div class="col-md-6">
+					   <div id="">
+						 <div class="form-group form_height" >
+						 <label>Comments :</label>
+						<textarea class="form-control" name="description" ng-model="ticketDetails.comment" rows="4" ></textarea>
+					    </div> 
+					   </div>
+					  </div>
+	               <div class="col-md-12">
+	                 <div class="form-group file_height">
+						<label>Attachment :</label> <input type="file" name="attachment" file ng-model="ticketDetails.attachment">
+					</div>
+	               </div>
+	               	<div class="col-md-12">
+	               	<div class="form-group pull-right">
+	               	<button type="reset" class="btn btn-default" ui-sref="raiseticket.Dashboard">Close</button>
+	               	<button type="button" class="btn btn-info" ng-click="draftfun()">Save</button>
+				     <button type="button" class="btn btn-primary" ng-click="addNew()"
+							ng-disabled="ticketissue.$invalid">Submit</button>
+					</div>
+				</div>
+				</div>
+			
+				</form>
+          </div>
+		
+			

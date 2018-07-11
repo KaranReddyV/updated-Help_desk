@@ -1,0 +1,175 @@
+<div class="row margin_set">
+	<div class="col-md-12"  ng-show="tickets && !notickets">
+		<h2 class="text-center pdng">
+			<b>Done Issues</b>
+		</h2>
+		<table class="table table1 table-condensed" ng-init="doneissuesfun()">
+			<thead>
+				<tr>
+				    <th>Ticket Id</th>
+					<th>Status</th>
+					<th>Department</th>
+					<th ng-show="!userfeedback && adminfeedback">Comments</th>
+					<th>AssignTo</th>
+					<th ng-show="userfeedback && !adminfeedback">Please Give Feedback</th>
+					<th ng-show="!userfeedback && adminfeedback">Feedback</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="issue in doneissues">
+				    <td><a href="" ng-click="profilefun(issue.id)"
+						data-toggle="modal" data-target="#myModal">{{issue.id}}</a></td>
+					<td>{{issue.status}}</td>
+					<td>{{issue.deptaName}}</td>
+					<td ng-show="!userfeedback && adminfeedback">{{issue.comment}}</td>
+					<td>{{issue.assignTo}}</td>					
+					<td ng-show="userfeedback && !adminfeedback"><button type="button" class="btn btn-warning btn-sm" data-toggle="modal" data-target="#feedback" ng-click="feedbackfun(issue.id)">Feedback</button></td>
+				     <td ng-show="!userfeedback && adminfeedback" ng-init="feedback(issue.id)">
+				     <i class="fa fa-star fa-2x" style="color:rgb(216, 213, 39);" ng-repeat="t in getYellowStars(feedback_admin)"></i>
+                      <i class="fa fa-star fa-2x" style="color:#878685;" ng-repeat="t in getGreyStars(feedback_admin)"></i> 
+             		</td>
+				</tr>
+			</tbody>
+		</table>
+<pagination total-items="totalCount" ng-change="pageChanged()" items-per-page="pageSizeSelected" direction-links="true"
+	                 ng-model="pageIndex" max-size="maxSize" class="pagination" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
+	</div>
+
+ 	 <div ng-show="notickets && !tickets" >
+  <h2 class="pdng text-center">Currently Tickets Not Found</h2>
+  </div>
+  <div class="modal fade" id="myModal1" role="dialog">
+    <div class="modal-dialog">
+      Modal content
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+
+        </div>
+        <div class="modal-body">
+      <img ng-src="data:image/jpeg;base64,{{attachment}}" id="photo-id" width="100%"/>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+  
+    <div class="modal fade" id="feedback" role="dialog">
+    <div class="modal-dialog">
+      Modal content
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          
+        </div>
+      <div class="modal-body">
+
+						 <div class="form-group form_height" >
+						 <label>Comments :</label>  <span>*</span>
+						<textarea class="form-control" name="description" ng-model="$parent.comments" ></textarea>
+					    </div> 
+		
+			<center> <ul class="rating">
+			<li ng-repeat="x in [].constructor(maxRating) track by $index">
+			<span ng-click="rateBy($index+1)" ng-show="ratingNo > $index" class="filled">&#9733;</span>
+			<span ng-click="rateBy($index+1)" ng-show="ratingNo <= $index">&#9733;</span>
+			</li>
+			</ul></center>
+			</div>
+			<div class="modal-footer">
+			<center><button type="button" id="btnSubmit" class="btn btn-primary" ng-click="rateClick()" data-dismiss="modal" >SUBMIT</button></center>
+			</div>
+      </div>
+      
+    </div>
+  </div>
+  
+
+  </div>
+  <!-- profile details -->
+<!-- Modal -->
+<div class="modal fade" id="myModal" role="dialog">
+	<div class="modal-dialog">
+
+		<!-- Modal content-->
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+				<h3 class="modal-title text-center">Ticket Id</h3>
+				<h4 class="text-center">{{ticketDetails.id}}</h4>
+			</div>
+			<div class="modal-body">
+				<div class="row">
+					<div class="col-md-offset-1 col-md-10 usertable">
+						<div class="col-md-offset-2 col-md-8">
+							<h3 class="pdng text-center">User Details</h3>
+							<div class="col-md-6 alltickets_mrgn">Employee Id</div>
+							<div class="col-md-6 alltickets_mrgn">{{ticketDetails.user.empId}}</div>
+							<div class="col-md-6 alltickets_mrgn">Employee Name</div>
+							<div class="col-md-6 alltickets_mrgn">{{ticketDetails.user.firstName}}</div>
+							<div class="col-md-6 alltickets_mrgn">Desk No</div>
+							<div class="col-md-6 alltickets_mrgn">{{ticketDetails.descNo}}</div>
+						</div>
+					</div>
+					<div class="col-md-offset-1 col-md-10 tickettable">
+						<div class="col-md-offset-2 col-md-8">
+							<h3 class="pdng text-center">Ticket Details</h3>
+							<div class="col-md-6 alltickets_mrgn">Ticket Id</div>
+							<div class="col-md-6 alltickets_mrgn">{{ticketDetails.id}}</div>
+							<div class="col-md-6 alltickets_mrgn">IssueType</div>
+							<div class="col-md-6 alltickets_mrgn">{{ticketDetails.issueType}}</div>
+							<div class="col-md-6 alltickets_mrgn">Priority</div>
+							<div class="col-md-6 alltickets_mrgn">{{ticketDetails.priority}}</div>
+							<div class="col-md-6 alltickets_mrgn">Description</div>
+							<div class="col-md-6 alltickets_mrgn">{{ticketDetails.description}}</div>
+							<div class="col-md-6 alltickets_mrgn">Status</div>
+							<div class="col-md-6 alltickets_mrgn">{{ticketDetails.status}}</div>
+							<div class="col-md-6 alltickets_mrgn">Comments</div>
+							<div class="col-md-6 alltickets_mrgn"><textarea rows="5" ng-model="ticketDetails.comment"></textarea></div>
+						<!-- 	<div class="col-md-6 alltickets_mrgn">Remark</div>
+							<div class="col-md-6 alltickets_mrgn">{{ticketDetails.comment}}</div> -->
+							<div class="col-md-6 alltickets_mrgn">Attachment</div>
+							<div class="col-md-6 alltickets_mrgn" ng-if="ticketDetails.attachment!==null">
+								{{ticketDetails.fileName}}
+								<button type="button" class="btn btn-primary btn-sm"
+									ng-disabled="ticketDetails.attachment==null"
+									data-toggle="modal" data-target="#myModal1"
+									ng-click="viewimage(issue.id)">View</button>
+							</div>
+							<div class="col-md-6 alltickets_mrgn" ng-if="ticketDetails.attachment==null">
+								{{ticketDetails.fileName}}
+								<p>No</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+
+	</div>
+</div>
+<!-- attachment view -->
+<div class="modal fade" id="myModal1" role="dialog">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-header">
+				<button type="button" class="close" data-dismiss="modal">&times;</button>
+			</div>
+			<div class="modal-body">
+				<img ng-src="data:image/jpeg;base64,{{ticketDetails.attachment}}"
+					id="photo-id" width="100%" />
+			</div>
+			<div class="modal-footer">
+				<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+			</div>
+		</div>
+
+	</div>
+</div>

@@ -1,0 +1,121 @@
+
+<div class="container-fluid height_login">
+
+	<div class="row">
+		<div class="col-md-5 col-sm-5 pull-left">
+			<img src="ojas-logo.png" alt="Ojas" class="img-responsive"
+				width="180px" height="150px">
+		</div>
+		<div class="col-md-2 col-sm-2"></div>
+		<div class="col-md-5 col-sm-5 para">
+			<p class="pull-right">
+				<span class="yellow">Experience Certainty:</span>IT Services
+				Business Solutions Consulting Services
+			</p>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-md-4 col-sm-4"></div>
+		<div class="col-md-4 login">
+			<h2 class="h2">Registration Page</h2>
+			<form name="regform">
+
+				<div class="form-group form_height">
+					<label for="role">User Type: <span>*</span></label> <select
+						class="form-control" ng-model="regfrm.role" name="role"
+						id="userrole" ng-change="rolechange()">
+						<option disabled selected hidden value="">Please select
+							option</option>
+						<option ng-repeat="user in users">{{user}}</option>
+					</select> <span ng-show="regform.role.$touched && regform.role.$pristine">*
+						Department is required</span>
+				</div>
+				<div class="form-group form_height" id="dept">
+					<label>Department</label> <span>*</span> <select
+						class="form-control" ng-model="regfrm.deptName"
+						name="deptName">
+						<option disabled selected hidden value="">Select option</option>
+						<option ng-repeat="dept in department">{{dept}}</option>
+
+					</select> <span
+						ng-show="regform.department.$touched && regform.department.$pristine">*
+						Department is required</span>
+
+				</div>
+				<div class="form-group form_height">
+					<label for="firstName">Employee FirstName: <span>*</span></label> <input
+						type="text" class="form-control" id="FirstName"
+						placeholder="Enter firstname" name="firstName"
+						ng-model="regfrm.firstName" required> <span
+						ng-show="regform.firstName.$touched && regform.firstName.$error.required">*Employee
+						firstname is required</span>
+				</div>
+				<div class="form-group form_height">
+					<label for="lastName">Employee LastName: <span>*</span></label> <input
+						type="text" class="form-control" id="lastName"
+						placeholder="Enter lastname" name="lastName"
+						ng-model="regfrm.lastName" required> <span
+						ng-show="regform.lastName.$touched && regform.lastName.$error.required">*Employee
+						lastname is required</span>
+				</div>
+				<div class="form-group form_height">
+					<label for="empid">Employee Id: <span>*</span></label> <input
+						type="text" class="form-control" id="empId"
+						placeholder="Enter employee id" name="empId"
+						ng-model="regfrm.empId" required> <span
+						ng-show="regform.empId.$touched && regform.empId.$error.required">*Employee
+						id is required</span>
+				</div>
+				<div class="form-group form_height">
+					<label for="email">Email Id: <span>*</span></label> <input
+						type="email" class="form-control" id="email"
+						placeholder="Enter email id" name="email" ng-model="regfrm.email"
+						required> <span
+						ng-show="regform.email.$touched && regform.email.$error.required">*Email
+						id is required</span>
+				</div>
+				<div class="form-group">
+					<label for="pwd">Create Password: <span>*</span></label> <input
+						type="password" class="form-control" id="password"
+						placeholder="Enter password" name="password"
+						ng-model="regfrm.password">
+				</div>
+				<div class="form-group form_height">
+					<label for="pwd">Confirm Password: <span>*</span></label> <input
+						type="password" class="form-control" id="confirmPassword"
+						placeholder="Re-enter password" name="confirmPassword"
+						ng-model="regfrm.confirmPassword"> <span
+						ng-show="regfrm.password!=regfrm.confirmPassword"><span
+						ng-show="regform.confirmPassword.$error">Please enter
+							correct password</span></span>
+				</div>
+
+				<div class="form-group form_height">
+					<label for="number">Contact Number: <span>*</span></label> <input
+						type="text" class="form-control" id="mobNo"
+						placeholder="Enter mobile number" name="mobNo"
+						ng-model="regfrm.mobNo" ng-pattern="/^\+?\d{10}$/" required>
+					<span
+						ng-show="regform.mobNo.$invalid &&regform.mobNo.$touched ||regform.mobNo.$invalid && regform.mobNo.$dirty"
+						style="color: red;"> <span
+						ng-show="regform.mobNo.$error.required">Phone number is
+							required </span>
+					</span> <span ng-show="regform.mobNo.$error.pattern" style="color: red;">Please
+						enter a 10 digit number</span>
+				</div>
+				<button type="button" class="btn btn-primary center-block"
+					ng-disabled="regform.$invalid" ng-click="regsubmit()">Submit</button>
+				<span><a class="pull-left" ui-sref="/login">Login Here</a></span>
+			</form>
+		</div>
+
+		<div class="col-md-4 col-sm-4"></div>
+	</div>
+
+	<footer>
+		<p class="clrhdng text-center">
+			<span class="yellow">&copy 2011-2018</span> Ojas Innovative
+			Technologies. All rights reserved.
+		</p>
+	</footer>
+</div>
